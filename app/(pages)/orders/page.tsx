@@ -142,9 +142,9 @@ return (
           placeholder="Search by Reason, Store Name, Store URL, or ID"
           value={searchQuery}
           onChange={handleSearchChange}
-          className="border p-2 w-full md:w-1/2"
+          className="border rounded-lg p-2 w-full md:w-1/2"
         />
-        <Button onClick={() => setModalOpen(true)} className="flex-end self-end">
+        <Button onClick={() => setModalOpen(true)} className="flex-end self-end bg-blue-600">
           Add new order
         </Button>
       </div>
