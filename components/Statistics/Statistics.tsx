@@ -129,24 +129,7 @@ export default function Statistics() {
           },
         }}
       />
-      <div className="flex justify-between mt-4">
-        <div className="flex items-center">
-          <div className="w-4 h-4 rounded-full bg-green-500 mr-2"></div>
-          <span>Accept</span>
-        </div>
-        <div className="flex items-center">
-          <div className="w-4 h-4 rounded-full bg-red-500 mr-2"></div>
-          <span>Reject</span>
-        </div>
-        <div className="flex items-center">
-          <div className="w-4 h-4 rounded-full bg-yellow-500 mr-2"></div>
-          <span>Escalate</span>
-        </div>
-        <div className="flex items-center">
-          <div className="w-4 h-4 rounded-full bg-gray-500 mr-2"></div>
-          <span>Undecided</span>
-        </div>
-      </div>
+
     </div>
   );
 }
