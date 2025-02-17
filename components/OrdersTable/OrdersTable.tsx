@@ -67,7 +67,7 @@ export default function OrdersTable({
   const [currentPage, setCurrentPage] = useState(1);
   const startIndex = (currentPage - 1) * maxItems;
   const paginatedRows = tableRows.slice(startIndex, startIndex + maxItems);
-console.log(tableRows);
+
 useEffect(() => {
   setCurrentPage(1); // Reset to first page whenever data changes
 }, [tableRows]);
