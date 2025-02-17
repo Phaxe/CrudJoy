@@ -23,7 +23,7 @@ export default function Statistics() {
       {
         label: "Order Status",
         data: [0, 0],
-        backgroundColor: ["rgba(20, 20, 20, 0.8)", "rgba(73, 73, 73, 0.8)"],
+        backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(153, 102, 255, 0.2)"],
         borderColor: ["rgba(75, 192, 192, 1)", "rgba(153, 102, 255, 1)"],
         borderWidth: 1,
       },
@@ -53,7 +53,7 @@ export default function Statistics() {
         {
           label: "Order Status",
           data: [activeOrders, inactiveOrders],
-          backgroundColor: ["rgba(20, 20, 20, 0.8)", "rgba(73, 73, 73, 0.8)"],
+          backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(153, 102, 255, 0.2)"],
           borderColor: ["rgba(75, 192, 192, 1)", "rgba(153, 102, 255, 1)"],
           borderWidth: 1,
         },
@@ -118,15 +118,18 @@ export default function Statistics() {
                 size: 12,
               },
               formatter: (value, ctx) => {
-                const total = ctx.dataset.data.reduce((acc, val) => acc + val, 0);
-                const percentage = ((value / total) * 100).toFixed(2) + '%';
+                const total = ctx.dataset.data
+                  .filter((val): val is number => typeof val === "number") // Ensure only numbers are considered
+                  .reduce((acc, val) => acc + val, 0);
+              
+                const percentage = total > 0 ? ((value / total) * 100).toFixed(2) + "%" : "0%";
                 return percentage;
               },
             },
           },
         }}
       />
-      <div className="flex justify-between mt-4 max-md:flex-col">
+      <div className="flex justify-between mt-4">
         <div className="flex items-center">
           <div className="w-4 h-4 rounded-full bg-green-500 mr-2"></div>
           <span>Accept</span>
