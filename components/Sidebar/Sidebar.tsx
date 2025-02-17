@@ -14,7 +14,7 @@ export default function Sidebar() {
       {/* Sidebar */}
       <div
         className={cn(
-          "h-screen bg-gray-200 text-black p-4 fixed top-0 left-0 transition-all duration-300",
+          "h-full bg-gray-200 text-black p-4 fixed top-0 left-0 transition-all duration-300",
           isOpen ? "w-64" : "w-16",
           "relative"
         )}

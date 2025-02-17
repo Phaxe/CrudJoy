@@ -1,12 +1,13 @@
-// components/Statistics.tsx
+"use client";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@/Redux/config/store";
 import { fetchOrders } from "@/Redux/slices/ordersSlice";
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
-import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, PieController, ArcElement } from "chart.js";
+import { Bar, Pie } from "react-chartjs-2";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, PieController, ArcElement, ChartDataLabels);
 
 export default function Statistics() {
   const dispatch = useDispatch<AppDispatch>();
@@ -22,8 +23,21 @@ export default function Statistics() {
       {
         label: "Order Status",
         data: [0, 0],
-        backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(153, 102, 255, 0.2)"],
+        backgroundColor: ["rgba(20, 20, 20, 0.8)", "rgba(73, 73, 73, 0.8)"],
         borderColor: ["rgba(75, 192, 192, 1)", "rgba(153, 102, 255, 1)"],
+        borderWidth: 1,
+      },
+    ],
+  });
+
+  const [pieChartData, setPieChartData] = useState({
+    labels: ["Accept", "Reject", "Escalate", "Undecided"],
+    datasets: [
+      {
+        label: "Decision Status",
+        data: [0, 0, 0, 0],
+        backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(255, 99, 132, 0.2)", "rgba(255, 206, 86, 0.2)", "rgba(201, 203, 207, 0.2)"],
+        borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(201, 203, 207, 1)"],
         borderWidth: 1,
       },
     ],
@@ -39,8 +53,35 @@ export default function Statistics() {
         {
           label: "Order Status",
           data: [activeOrders, inactiveOrders],
-          backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(153, 102, 255, 0.2)"],
+          backgroundColor: ["rgba(20, 20, 20, 0.8)", "rgba(73, 73, 73, 0.8)"],
           borderColor: ["rgba(75, 192, 192, 1)", "rgba(153, 102, 255, 1)"],
+          borderWidth: 1,
+        },
+      ],
+    });
+
+    const decisionCounts = {
+      accept: 0,
+      reject: 0,
+      escalate: 0,
+      undecided: 0,
+    };
+
+    orders.forEach(order => {
+      if (order.decision === "accept") decisionCounts.accept++;
+      else if (order.decision === "reject") decisionCounts.reject++;
+      else if (order.decision === "escalate") decisionCounts.escalate++;
+      else decisionCounts.undecided++;
+    });
+
+    setPieChartData({
+      labels: ["Accept", "Reject", "Escalate", "Undecided"],
+      datasets: [
+        {
+          label: "Decision Status",
+          data: [decisionCounts.accept, decisionCounts.reject, decisionCounts.escalate, decisionCounts.undecided],
+          backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(255, 99, 132, 0.2)", "rgba(255, 206, 86, 0.2)", "rgba(201, 203, 207, 0.2)"],
+          borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(201, 203, 207, 1)"],
           borderWidth: 1,
         },
       ],
@@ -65,6 +106,44 @@ export default function Statistics() {
           },
         }}
       />
+      <h2 className="text-2xl font-bold mt-8 mb-4">Decision Status</h2>
+      <Pie
+        data={pieChartData}
+        options={{
+          responsive: true,
+          plugins: {
+            datalabels: {
+              color: '#333',
+              font: {
+                size: 12,
+              },
+              formatter: (value, ctx) => {
+                const total = ctx.dataset.data.reduce((acc, val) => acc + val, 0);
+                const percentage = ((value / total) * 100).toFixed(2) + '%';
+                return percentage;
+              },
+            },
+          },
+        }}
+      />
+      <div className="flex justify-between mt-4 max-md:flex-col">
+        <div className="flex items-center">
+          <div className="w-4 h-4 rounded-full bg-green-500 mr-2"></div>
+          <span>Accept</span>
+        </div>
+        <div className="flex items-center">
+          <div className="w-4 h-4 rounded-full bg-red-500 mr-2"></div>
+          <span>Reject</span>
+        </div>
+        <div className="flex items-center">
+          <div className="w-4 h-4 rounded-full bg-yellow-500 mr-2"></div>
+          <span>Escalate</span>
+        </div>
+        <div className="flex items-center">
+          <div className="w-4 h-4 rounded-full bg-gray-500 mr-2"></div>
+          <span>Undecided</span>
+        </div>
+      </div>
     </div>
   );
 }
