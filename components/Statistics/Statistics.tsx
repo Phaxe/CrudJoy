@@ -23,8 +23,8 @@ export default function Statistics() {
       {
         label: "Order Status",
         data: [0, 0],
-        backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(153, 102, 255, 0.2)"],
-        borderColor: ["rgba(75, 192, 192, 1)", "rgba(153, 102, 255, 1)"],
+        backgroundColor: ["rgba(0, 171, 198, 0.3)", "rgba(245, 63, 63, 0.3)"],
+        borderColor: ["rgba(0, 171, 198, 1)", "rgba(245, 63, 63, 1)"],
         borderWidth: 1,
       },
     ],
@@ -36,8 +36,8 @@ export default function Statistics() {
       {
         label: "Decision Status",
         data: [0, 0, 0, 0],
-        backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(255, 99, 132, 0.2)", "rgba(255, 206, 86, 0.2)", "rgba(201, 203, 207, 0.2)"],
-        borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(201, 203, 207, 1)"],
+        backgroundColor: ["rgba(0, 203, 0, 0.3)", "rgba(255, 99, 132, 0.2)", "rgba(255, 206, 86, 0.2)", "rgba(201, 203, 207, 0.2)"],
+        borderColor: ["rgba(0, 203, 0, 1)", "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(201, 203, 207, 1)"],
         borderWidth: 1,
       },
     ],
@@ -53,8 +53,8 @@ export default function Statistics() {
         {
           label: "Order Status",
           data: [activeOrders, inactiveOrders],
-          backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(153, 102, 255, 0.2)"],
-          borderColor: ["rgba(75, 192, 192, 1)", "rgba(153, 102, 255, 1)"],
+          backgroundColor: ["rgba(0, 171, 198, 0.3)", "rgba(245, 63, 63, 0.3)"],
+          borderColor: ["rgba(0, 171, 198, 1)", "rgba(245, 63, 63, 1)"],
           borderWidth: 1,
         },
       ],
@@ -80,8 +80,8 @@ export default function Statistics() {
         {
           label: "Decision Status",
           data: [decisionCounts.accept, decisionCounts.reject, decisionCounts.escalate, decisionCounts.undecided],
-          backgroundColor: ["rgba(75, 192, 192, 0.2)", "rgba(255, 99, 132, 0.2)", "rgba(255, 206, 86, 0.2)", "rgba(201, 203, 207, 0.2)"],
-          borderColor: ["rgba(75, 192, 192, 1)", "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(201, 203, 207, 1)"],
+          backgroundColor: ["rgba(0, 203, 0, 0.3)", "rgba(255, 99, 132, 0.2)", "rgba(255, 206, 86, 0.2)", "rgba(201, 203, 207, 0.2)"],
+          borderColor: ["rgba(0, 203, 0, 1)", "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(201, 203, 207, 1)"],
           borderWidth: 1,
         },
       ],
@@ -95,15 +95,7 @@ export default function Statistics() {
         data={chartData}
         options={{
           responsive: true,
-          plugins: {
-            legend: {
-              position: "top" as const,
-            },
-            title: {
-              display: true,
-              text: "Order Status",
-            },
-          },
+     
         }}
       />
       <h2 className="text-2xl font-bold mt-8 mb-4">Decision Status</h2>
