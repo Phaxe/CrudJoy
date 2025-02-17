@@ -11,7 +11,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend,
 
 export default function Statistics() {
   const dispatch = useDispatch<AppDispatch>();
-  const { data: orders = [] } = useSelector((state: RootState) => state.orders);
+  const { data: orders = [], loading, error } = useSelector((state: RootState) => state.orders);
 
   useEffect(() => {
     dispatch(fetchOrders());
@@ -44,49 +44,78 @@ export default function Statistics() {
   });
 
   useEffect(() => {
-    const activeOrders = orders.filter(order => order.active).length;
-    const inactiveOrders = orders.length - activeOrders;
+    if (!loading && !error && orders.length > 0) {
+      const activeOrders = orders.filter(order => order.active).length;
+      const inactiveOrders = orders.length - activeOrders;
 
-    setChartData({
-      labels: ["Active", "Inactive"],
-      datasets: [
-        {
-          label: "Order Status",
-          data: [activeOrders, inactiveOrders],
-          backgroundColor: ["rgba(0, 171, 198, 0.3)", "rgba(245, 63, 63, 0.3)"],
-          borderColor: ["rgba(0, 171, 198, 1)", "rgba(245, 63, 63, 1)"],
-          borderWidth: 1,
-        },
-      ],
-    });
+      setChartData({
+        labels: ["Active", "Inactive"],
+        datasets: [
+          {
+            label: "Order Status",
+            data: [activeOrders, inactiveOrders],
+            backgroundColor: ["rgba(0, 171, 198, 0.3)", "rgba(245, 63, 63, 0.3)"],
+            borderColor: ["rgba(0, 171, 198, 1)", "rgba(245, 63, 63, 1)"],
+            borderWidth: 1,
+          },
+        ],
+      });
 
-    const decisionCounts = {
-      accept: 0,
-      reject: 0,
-      escalate: 0,
-      undecided: 0,
-    };
+      const decisionCounts = {
+        accept: 0,
+        reject: 0,
+        escalate: 0,
+        undecided: 0,
+      };
 
-    orders.forEach(order => {
-      if (order.decision === "accept") decisionCounts.accept++;
-      else if (order.decision === "reject") decisionCounts.reject++;
-      else if (order.decision === "escalate") decisionCounts.escalate++;
-      else decisionCounts.undecided++;
-    });
+      orders.forEach(order => {
+        if (order.decision === "accept") decisionCounts.accept++;
+        else if (order.decision === "reject") decisionCounts.reject++;
+        else if (order.decision === "escalate") decisionCounts.escalate++;
+        else decisionCounts.undecided++;
+      });
 
-    setPieChartData({
-      labels: ["Accept", "Reject", "Escalate", "Undecided"],
-      datasets: [
-        {
-          label: "Decision Status",
-          data: [decisionCounts.accept, decisionCounts.reject, decisionCounts.escalate, decisionCounts.undecided],
-          backgroundColor: ["rgba(0, 203, 0, 0.3)", "rgba(255, 99, 132, 0.2)", "rgba(255, 206, 86, 0.2)", "rgba(201, 203, 207, 0.2)"],
-          borderColor: ["rgba(0, 203, 0, 1)", "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(201, 203, 207, 1)"],
-          borderWidth: 1,
-        },
-      ],
-    });
-  }, [orders]);
+      setPieChartData({
+        labels: ["Accept", "Reject", "Escalate", "Undecided"],
+        datasets: [
+          {
+            label: "Decision Status",
+            data: [decisionCounts.accept, decisionCounts.reject, decisionCounts.escalate, decisionCounts.undecided],
+            backgroundColor: ["rgba(0, 203, 0, 0.3)", "rgba(255, 99, 132, 0.2)", "rgba(255, 206, 86, 0.2)", "rgba(201, 203, 207, 0.2)"],
+            borderColor: ["rgba(0, 203, 0, 1)", "rgba(255, 99, 132, 1)", "rgba(255, 206, 86, 1)", "rgba(201, 203, 207, 1)"],
+            borderWidth: 1,
+          },
+        ],
+      });
+    }
+  }, [orders, loading, error]);
+
+  if (loading) {
+    return (
+      <div className="w-full max-w-3xl mx-auto text-center">
+        <h2 className="text-2xl font-bold mb-4">Order Statistics</h2>
+        <p>Loading data...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full max-w-3xl mx-auto text-center">
+        <h2 className="text-2xl font-bold mb-4">Order Statistics</h2>
+        <p>Error: {error}</p>
+      </div>
+    );
+  }
+
+  if (orders.length === 0) {
+    return (
+      <div className="w-full max-w-3xl mx-auto text-center">
+        <h2 className="text-2xl font-bold mb-4">Order Statistics</h2>
+        <p>No data available.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-3xl mx-auto">
@@ -95,7 +124,6 @@ export default function Statistics() {
         data={chartData}
         options={{
           responsive: true,
-     
         }}
       />
       <h2 className="text-2xl font-bold mt-8 mb-4">Decision Status</h2>
@@ -113,7 +141,7 @@ export default function Statistics() {
                 const total = ctx.dataset.data
                   .filter((val): val is number => typeof val === "number") // Ensure only numbers are considered
                   .reduce((acc, val) => acc + val, 0);
-              
+                
                 const percentage = total > 0 ? ((value / total) * 100).toFixed(2) + "%" : "0%";
                 return percentage;
               },
@@ -121,7 +149,6 @@ export default function Statistics() {
           },
         }}
       />
-
     </div>
   );
 }

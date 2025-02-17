@@ -141,8 +141,7 @@ useEffect(() => {
                             }`}
                           >
                             {row.decision
-                              ? row.decision.charAt(0).toUpperCase() +
-                                row.decision.slice(1)
+                              ? row.decision
                               : "Change"}
                             <ChevronDown className=" h-4 w-4" />
                           </Button>
