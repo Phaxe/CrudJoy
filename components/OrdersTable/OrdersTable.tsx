@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
@@ -68,7 +68,9 @@ export default function OrdersTable({
   const startIndex = (currentPage - 1) * maxItems;
   const paginatedRows = tableRows.slice(startIndex, startIndex + maxItems);
 console.log(tableRows);
-
+useEffect(() => {
+  setCurrentPage(1); // Reset to first page whenever data changes
+}, [tableRows]);
   // Function to get color classes based on decision
   const getDecisionStyles = (decision: string | null) => {
     switch (decision) {
